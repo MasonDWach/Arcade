@@ -14,6 +14,11 @@ body {
   color: #e5caff;
   background-color: rgb(0, 0, 0);
   align-items: center;
+  
+}
+
+.buttonContainer button:hover {
+    background-color: #4b4b4ba1;
 }
 
 .reload-container {
@@ -29,6 +34,11 @@ body {
   color: #e5caff;
   background-color: rgb(0, 0, 0);
   align-items: center;
+}
+
+.reload-container button:hover {
+    background-color: #4b4b4ba1;
+
 }
 
 p {
