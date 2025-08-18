@@ -1,59 +1,89 @@
+let isPlayingSessionActive = false;
+let isSingleGameActive = false;
+let currentGame = null;
 
-    function arcadeloop() {
-
-        let pickAnother = prompt("Would you like to pick another game to play? y/n");
-        playing = (pickAnother.toLowerCase() === 'y') ? true : false;
+    // starts the Playing session
+    function startArcadeGame(gameFunction) {
+        // set current game
+        currentGame = gameFunction;
         
-        if (!playing) {
-            document.body.innerHTML += `
-                <div class="reload-container">
-                    <p>Thanks for playing! Come back soon.</p>
-                    <button onclick="location.reload()">Reload Page</button>
-                </div>
-            `;
+        // Start Playing session if not already active
+        if (!isPlayingSessionActive) {
+            isPlayingSessionActive = true;
+            playingLoop();
         }
-
+        
+        // Start Single Game session
+        isSingleGameActive = true;
+        singleGameLoop();
     }
 
-    function guessingGame() {
-        let keepPlaying = true;
+    // PLAYING LOOP manages the entire arcade session
+    function playingLoop() {
+        while (isPlayingSessionActive) {
+            // This loop continues until player declines to pick another game
+            break;
+        }
+    }
 
-        while (keepPlaying) {
-            let randomNumber = Math.floor(Math.random() * 10) + 1;
-            let guessCount = 0;
-            let guessedCorrectly = false;
-        
-
-            while (!guessedCorrectly) {
-                let input = prompt("Enter a number between 1 and 10");
-                if (input === null) {
-                    alert("Game cancelled.");
-                    return;
-                }
-
-                let guess = Number(input);
-                guessCount++;
-
-                if (guess > randomNumber) {
-                    alert("Your guess was too high, guess again.");
-                } else if (guess < randomNumber) {
-                    alert("Your guess was too low, guess again.");
-                } else {
-                    alert("You guessed it in " + guessCount + " guesses!");
-                    guessedCorrectly = true;
+    // SINGLE GAME LOOP - manages individual game sessions
+    function singleGameLoop() {
+        while (isSingleGameActive && isPlayingSessionActive) {
+            currentGame();
+            
+            const keepPlaying = prompt("Would you like to keep playing this game? y/n").toLowerCase();
+            isSingleGameActive = keepPlaying === 'y';
+            
+            if (!isSingleGameActive) {
+                const pickAnother = prompt("Would you like to pick another game to play? y/n").toLowerCase();
+                isPlayingSessionActive = pickAnother === 'y';
+                
+                if (!isPlayingSessionActive) {
+                    endPlayingSession();
                 }
             }
-
-            let playAgain = prompt("Would you like to keep playing this game? y/n");
-            keepPlaying = (playAgain.toLowerCase() === 'y') ? true : false;
         }
-        arcadeloop();
     }
 
-    let consultOracle = function() {
-        let keepPlaying = true
+    function endPlayingSession() {
+        document.body.innerHTML = `
+            <div class="reload-container">
+                <p>Thanks for playing! Come back soon.</p>
+                <button onclick="location.reload()">Reload Page</button>
+            </div>
+        `;
+    }
+
+
+    function guessingGame() {
+        let randomNumber = Math.floor(Math.random() * 10) + 1;
+        let guessCount = 0;
+        let guessedCorrectly = false;
         
-        while (keepPlaying) {
+
+        while (!guessedCorrectly) {
+            let input = prompt("Enter a number between 1 and 10");
+            if (input === null) {
+                alert("Game cancelled.");
+                return;
+            }
+
+            let guess = Number(input);
+            guessCount++;
+
+            if (guess > randomNumber) {
+                alert("Your guess was too high, guess again.");
+            } else if (guess < randomNumber) {
+                alert("Your guess was too low, guess again.");
+            } else {
+                alert("You guessed it in " + guessCount + " guesses!");
+                guessedCorrectly = true;
+            }
+        }
+    }
+    
+
+    let consultOracle = function() {
             let question = "";
 
             // Create array with 8 ball answers
@@ -85,17 +115,10 @@
                 
             }
 
-            let playAgain = prompt("Would you like to keep playing this game? y/n");
-            keepPlaying = (playAgain.toLowerCase() === 'y') ? true : false;
         }
 
-        arcadeloop();
-    }
 
     let bnh = () => {
-        let keepPlaying = true
-
-        while (keepPlaying) {
             // Assigning game tracking variables.
             let gamesPlayed = 0;
             let gamesWon = 0;
@@ -266,9 +289,4 @@
                 }
                 }
             }
-
-            let playAgain = prompt("Would you like to keep playing this game? y/n");
-            keepPlaying = (playAgain.toLowerCase() === 'y') ? true : false;
         }
-        arcadeloop();
-    }
